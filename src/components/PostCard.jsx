@@ -8,7 +8,7 @@ function PostCard({ $id,title,featuredImage }) {
     const [url , setUrl] = useState('')
     useEffect(()=>{
         authService.getFilePreview(featuredImage).then((data)=>{
-            console.log(data.pathname);
+            // console.log(data.pathname);
             setUrl(data.href)
         })
     },[])

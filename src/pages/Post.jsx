@@ -1,27 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React,{ useEffect,useState } from "react";
+import { Link,useNavigate,useParams } from "react-router-dom";
 import appwriteService from '../appWrite/configure'
-import { Button, Container } from "../index";
+import { Button,Container } from "../index";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 
 export default function Post() {
-    const [post, setPost] = useState(null);
+    const [post,setPost] = useState(null);
     const { slug } = useParams();
     const navigate = useNavigate();
 
     const userData = useSelector((state) => state.auth.userData);
 
     const isAuthor = post && userData ? post.userId === userData.$id : false;
-
+    const [url,setUrl] = useState()
     useEffect(() => {
         if (slug) {
             appwriteService.getPost(slug).then((post) => {
-                if (post) setPost(post);
+                if (post) {
+                    appwriteService.getFilePreview(post.featuredImage).then((data) => {
+                        // console.log(data.href);
+                        setUrl(data.href)
+                    })
+                    // console.log(post);
+                    setPost(post);
+                }
                 else navigate("/");
-            });
+            })
         } else navigate("/");
-    }, [slug, navigate]);
+    },[slug,navigate]);
+
 
     const deletePost = () => {
         appwriteService.deletePost(post.$id).then((status) => {
@@ -37,8 +45,10 @@ export default function Post() {
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     <img
-                        src={appwriteService.getFilePreview(post.featuredImage)}
+                        src={url}
                         alt={post.title}
+                        height={200}
+                        width={200}
                         className="rounded-xl"
                     />
 
