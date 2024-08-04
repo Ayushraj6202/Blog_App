@@ -1,31 +1,35 @@
-import React,{ useEffect, useId, useState } from "react";
-import { forwardRef } from "react";
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import authService from "../appWrite/configure";
+import Loading from "./Loading";
 
-function PostCard({ $id,title,featuredImage }) {
+function PostCard({ $id, title, featuredImage }) {
+    const [loading, setLoading] = useState(true);
+    const [url, setUrl] = useState('');
 
-    const [url , setUrl] = useState('')
-    useEffect(()=>{
-        authService.getFilePreview(featuredImage).then((data)=>{
-            // console.log(data.pathname);
-            setUrl(data.href)
-        })
-    },[])
+    useEffect(() => {
+        authService.getFilePreview(featuredImage).then((data) => {
+            setUrl(data.href);
+            setLoading(false);
+        });
+    }, [featuredImage]);
+
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
-        <Link to={`/post/${$id}`}>
-            <div className='w-full bg-gray-100 rounded-xl p-4'>
-                <div className='w-full justify-center mb-4'>
-                    
-                    <img src={url} height={100} width={100} alt={title}
-                    className='rounded-xl' />
-    
+        <Link to={`/post/${$id}`} className="block w-full">
+            <div className='bg-white rounded-lg shadow-md overflow-hidden'>
+                <div className='w-full h-48 flex justify-center items-center overflow-hidden'>
+                    <img src={url} alt={title} className='object-cover w-full h-full' />
                 </div>
-                <h2
-                className='text-xl font-bold'
-                >{title}</h2>
+                <div className='p-4'>
+                    <h2 className='text-xl font-bold mb-2'>{title}</h2>
+                </div>
             </div>
         </Link>
-      )
+    );
 }
+
 export default PostCard;

@@ -1,9 +1,10 @@
 import React,{ useCallback,useEffect,useState } from "react";
-import { useForm } from "react-hook-form";
+import { set,useForm } from "react-hook-form";
 import { Button,Input,RTE,Select } from "../index";
 import appwriteService from "../appWrite/configure";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Loading from "./Loading";
 
 export default function PostForm({ post }) {
     const { register,handleSubmit,watch,setValue,control,getValues } = useForm({
@@ -14,12 +15,13 @@ export default function PostForm({ post }) {
             status: post?.status || "active",
         },
     });
-
+    const [loading,setLoading] = useState(false);
     const navigate = useNavigate();
     const userData = useSelector((state) => (state.auth.userData));
     // console.log(userData);
-    
+
     const submit = async (data) => {
+        setLoading(true);
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
             if (file) {
@@ -70,8 +72,8 @@ export default function PostForm({ post }) {
         return () => subscription.unsubscribe();
     },[watch,slugTransform,setValue]);
 
-    return (
-        <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
+    if (loading == false) {
+        return <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
                 <Input
                     label="Title :"
@@ -98,15 +100,16 @@ export default function PostForm({ post }) {
                     accept="image/png, image/jpg, image/jpeg, image/gif"
                     {...register("image",{ required: !post })}
                 />
-                {post && (
-                    <div className="w-full mb-4">
-                        <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
-                            alt={post.title}
-                            className="rounded-lg"
-                        />
-                    </div>
-                )}
+                {/* {post && (
+                        <div className="w-full mb-4">
+                            <img
+                                src={appwriteService.getFilePreview(post.featuredImage)}
+                                alt={post.title}
+                                height="100px" width="100px"
+                                className="rounded-lg"
+                            />
+                        </div>
+                    )} */}
                 <Select
                     options={["active","inactive"]}
                     label="Status"
@@ -118,5 +121,9 @@ export default function PostForm({ post }) {
                 </Button>
             </div>
         </form>
-    );
+    } else {
+        return (
+            <Loading/>
+        )
+    }
 }
