@@ -16,12 +16,12 @@ export default function PostForm({ post }) {
         },
     });
     const [loading,setLoading] = useState(false);
+    const [error,seterror] = useState(false);
+
     const navigate = useNavigate();
     const userData = useSelector((state) => (state.auth.userData));
-    // console.log(userData);
-
+   
     const submit = async (data) => {
-        setLoading(true);
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
             if (file) {
@@ -72,7 +72,7 @@ export default function PostForm({ post }) {
         return () => subscription.unsubscribe();
     },[watch,slugTransform,setValue]);
 
-    if (loading == false) {
+    if (true) {
         return <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
                 <Input
@@ -98,6 +98,7 @@ export default function PostForm({ post }) {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
+                    required={true}
                     {...register("image",{ required: !post })}
                 />
                 {/* {post && (
@@ -121,9 +122,5 @@ export default function PostForm({ post }) {
                 </Button>
             </div>
         </form>
-    } else {
-        return (
-            <Loading/>
-        )
     }
 }
