@@ -15,11 +15,11 @@ export default function Signup() {
     const { register,handleSubmit } = useForm()
     const [loading,setloading] = useState(false);
     const create = async (data) => {
-        setloading(true)
         setError('')
         try {
             const user = await authService.createAccount(data)
             if (user) {
+                setloading(true)
                 const userData = await authService.getCurrentUser()
                 if (userData) {
                     dispatch(authLogin(userData))

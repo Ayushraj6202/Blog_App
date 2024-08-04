@@ -15,11 +15,11 @@ export default function Login() {
     const { register,handleSubmit } = useForm()
     const [loading,setloading] = useState(false);
     const login = async (data) => {
-        setloading(true)
         setError('')
         try {
             const session = await authService.login(data)
             if (session) {
+                setloading(true)
                 const userData = await authService.getCurrentUser()
                 if (userData) {
                     dispatch(authLogin(userData))
