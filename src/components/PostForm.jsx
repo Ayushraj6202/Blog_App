@@ -1,4 +1,4 @@
-import React,{ useCallback } from "react";
+import React,{ useCallback,useEffect,useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button,Input,RTE,Select } from "../index";
 import appwriteService from "../appWrite/configure";
@@ -16,8 +16,9 @@ export default function PostForm({ post }) {
     });
 
     const navigate = useNavigate();
-    const userData = useSelector((state) => state.auth.userData);
-
+    const userData = useSelector((state) => (state.auth.userData));
+    // console.log(userData);
+    
     const submit = async (data) => {
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
@@ -38,8 +39,9 @@ export default function PostForm({ post }) {
             if (file) {
                 const fileId = file.$id;
                 data.featuredImage = fileId;
-                const dbPost = await appwriteService.createPost({ ...data,userId:userData.$id});
-
+                const dbPost = await appwriteService.createPost({ ...data,userId: userData?.$id });
+                // const dbPost = await appwriteService.createPost({ ...data,userId:data.slug});
+                console.log(data,userData);
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`);
                 }

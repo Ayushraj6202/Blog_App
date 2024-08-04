@@ -14,7 +14,8 @@ import AddPost from './pages/AddPost.jsx'
 import EditPost from './pages/EditPost.jsx'
 import Post from './pages/Post.jsx'
 import AllPosts from './pages/AllPosts.jsx'
-
+import Github from './pages/Github.jsx'
+import Contact from "./pages/Contact.jsx";
 
 
 
@@ -47,7 +48,7 @@ const router = createBrowserRouter([
             ),
         },
         {
-            path: "/all-posts",
+            path: "/my-posts",
             element: (
                 <AuthLayout authentication>
                     {" "}
@@ -76,6 +77,14 @@ const router = createBrowserRouter([
         {
             path: "/post/:slug",
             element: <Post />,
+        },
+        {
+            path: "/github",
+            element: <Github />,
+        },
+        {
+            path: "/contact",
+            element: <Contact />,
         },
     ],
 },

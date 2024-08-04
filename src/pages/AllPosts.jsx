@@ -1,12 +1,17 @@
 import React,{ useState,useEffect } from 'react'
 import { Container,PostCard } from '../index'
 import appwriteService from "../appWrite/configure"
+import { Query } from 'appwrite'
+import { useSelector } from 'react-redux'
+
 
 function AllPosts() {
     const [posts,setPosts] = useState([])
-
+    const userId = useSelector((state)=>(state.auth.userData))?.$id
+    // console.log(userId.$id);
+    
     useEffect(()=>{
-        appwriteService.getPosts([]).then((post) => {
+        appwriteService.getPosts([Query.equal('userId',userId)]).then((post) => {
             if (post) {
                 setPosts(post.documents)
             }
