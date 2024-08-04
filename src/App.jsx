@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React,{ useState,useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./App.css";
 import authService from "./appWrite/auth";
-import { login, logout } from "./store/authSlice";
+import { login,logout } from "./store/authSlice";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Outlet } from "react-router-dom";
 
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading,setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function App() {
         }
       })
       .finally(() => setLoading(false));
-  }, []);
+  },[]);
 
   if (loading == true) {
     return null;
@@ -33,7 +33,7 @@ function App() {
         <div className="w-full block">
           <Header />
           <main>
-           <Outlet />
+            <Outlet />
           </main>
           <Footer />
         </div>
