@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { LogoutBtn,Container,Logo } from '../index'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link,useNavigate,NavLink } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import authService from "../appWrite/auth";
 
@@ -58,11 +58,14 @@ export default function Header() {
                         <ul className="flex ml-auto">
                             {NavItems.map((item) => (
                                 (item.active) ? (<li key={item.slug}>
-                                    <button
-                                    className="inline-block px-6 py-2 duration-200 rounded-full focus:bg-slate-100" 
-                                    onClick={() => navigate(item.slug)}>
-                                        {item.name}
-                                    </button>
+                                   <NavLink
+                                            to={item.slug}
+                                            className={({ isActive }) => 
+                                                `inline-block px-6 py-2 duration-200 rounded-full ${isActive ? 'bg-slate-200' : ''}`
+                                            }
+                                        >
+                                            {item.name}
+                                        </NavLink>
                                 </li>)
                                     : null
                             ))}

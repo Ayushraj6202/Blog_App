@@ -4,6 +4,7 @@ import appwriteService from '../appWrite/configure'
 import { Button,Container } from "../index";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 
 export default function Post() {
     const [post,setPost] = useState(null);
@@ -37,7 +38,6 @@ export default function Post() {
             }
         });
     };
-
     return post ? (
         <div className="py-8">
             <Container>
@@ -52,8 +52,8 @@ export default function Post() {
 
                     {isAuthor && (
                         <div className="absolute right-6 top-6">
-                            <Link to={`/edit-post/${post.$id}`}>
-                                <Button bgColor="bg-green-500" className="mr-3" >
+                            <Link to={`/edit-post/${post.$id}`} >
+                                <Button bgColor="bg-green-500" className="mr-3" onClick={()=>(setloading(true))}>
                                     Edit
                                 </Button>
                             </Link>

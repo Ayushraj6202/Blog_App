@@ -2,19 +2,29 @@ import React, { useEffect, useState } from 'react';
 import appwriteService from '../appWrite/configure';
 import { Container, PostCard } from '../index';
 import { useSelector } from 'react-redux';
+import Loading from '../components/Loading';
 
 function Home() {
     const [posts, setPosts] = useState([]);
     const status = useSelector((state) => state.auth.status);
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        appwriteService.getPosts().then((posts) => {
-            if (posts) {
-                setPosts(posts.documents);
-            }
-        });
+        if(status)
+        {
+            setLoading(true);
+            appwriteService.getPosts().then((posts) => {
+                if (posts) {
+                    setPosts(posts.documents);
+                    setLoading(false)
+                }
+            });
+        }
     }, []);
 
+    if(loading)
+    {
+        return <Loading/>
+    }
     if (status === false) {
         return (
             <div className="w-full py-8 mt-4 text-center">
