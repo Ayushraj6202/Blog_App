@@ -7,7 +7,7 @@ import Loading from '../components/Loading';
 function Home() {
     const [posts, setPosts] = useState([]);
     const status = useSelector((state) => state.auth.status);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if(status)
         {

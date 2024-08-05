@@ -22,9 +22,8 @@ export default function Login() {
                 setloading(true)
                 const userData = await authService.getCurrentUser()
                 if (userData) {
-                    dispatch(authLogin(userData))
-                    console.log("bhej diye data");
-                    
+                    dispatch(authLogin({userData}))
+                    // console.log(userData);
                 }
                 navigate('/')
             }

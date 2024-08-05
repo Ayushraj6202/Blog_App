@@ -1,45 +1,41 @@
-import React, { useState, useEffect, useId } from 'react';
-import { Container, PostCard } from '../index';
+import React,{ useState,useEffect,useId } from 'react';
+import { Container,PostCard } from '../index';
 import appwriteService from "../appWrite/configure";
 import { Query } from 'appwrite';
 import { useSelector } from 'react-redux';
 import Loading from '../components/Loading';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate,useNavigate } from 'react-router-dom';
 
 function AllPosts() {
-    const [loading, setLoading] = useState(false);
-    const [posts, setPosts] = useState([]);
-    const status = useSelector((state) => state.auth.status);
-    let userId = useSelector((state) => state.auth.userData?.$id);
-    
-    useEffect(()=>{
-        console.log(userId,status);
+    const [loading,setLoading] = useState(false);
+    const userId = useSelector((state) => {return state.auth.userData?.$id});
+   
+    const [posts,setPosts] = useState([]);
 
-    },[])
+    console.log("before",userId);
     useEffect(() => {
-        if (userId) {
-            appwriteService.getPosts([Query.equal('userId', userId)])
-                .then((post) => {
-                    console.log("post le liya");
+        console.log("after",userId);
+        
+        const fetchPosts = async () => {
+            if (userId) {
+                setLoading(true); // Start loading
+                try {
+                    const post = await appwriteService.getPosts([Query.equal('userId', userId)]);
                     if (post) {
                         setPosts(post.documents);
                     }
-                })
-                .catch((error) => {
+                } catch (error) {
                     console.error("Error fetching posts: ", error);
-                })
-                .finally(() => {
+                } finally {
                     setLoading(false); // Stop loading
-                });
-        } else {
-            setLoading(true)
-            // setPosts([]); 
-        }
-    }, [status,userId]);
+                }
+            }
+        };
 
-    if(status&&!userId){
-        userId = useSelector((state) => state.auth.userData?.$id);
-    }
+        fetchPosts();
+    }, [userId]);
+
+
     if (posts.length === 0) {
         return (
             <div className='text-2xl bg-slate-500'>
