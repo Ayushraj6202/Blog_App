@@ -18,6 +18,8 @@ export default function Post() {
     const [url,setUrl] = useState()
     useEffect(() => {
         if (slug) {
+            console.log('slug ',slug);
+            
             appwriteService.getPost(slug).then((post) => {
                 if (post) {
                     appwriteService.getFilePreview(post.featuredImage).then((data) => {

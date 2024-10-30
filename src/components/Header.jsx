@@ -47,7 +47,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="shadow py-4 bg-gray-500">
+            <header className="shadow py-4 bg-blue-500">
                 <Container>
                     <nav className="flex">
                         <div className="mr-4">
